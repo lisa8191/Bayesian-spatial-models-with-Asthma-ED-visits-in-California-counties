@@ -1,0 +1,29 @@
+model{
+  
+
+  for(i in 1:55) {
+    b3[i] ~ dnorm(theta2,tau1[i])
+    #b3[i] ~ dnorm(theta2,tau1)
+    
+    tau1[i]  <- pow(sigma.theta[i],-1)
+    sigma.theta[i]~dunif(0,100)
+    theta_star[i] <- theta
+    
+    
+  }
+  b1[1:55] ~ spatial.exp(theta_star[], xcord[], ycord[], tau, phi, kappa) 
+  
+  for( k in 1:N ){
+    y[k] ~ dpois(lambda[k])
+    log(lambda[k]) <-  b1[R[k]] + b3[R[k]]*TR[k]
+    
+    
+  }
+  theta ~ dnorm(4.210063,0.1142681)
+  theta2 ~ dt(0.01644351,14.34982,7)
+  tau ~ dgamma(0.001, 0.001)
+  sigsq <- pow(tau,-1)
+  phi ~ dunif(0.05, 15)
+  kappa ~ dunif(0.05,1.95) 
+
+}

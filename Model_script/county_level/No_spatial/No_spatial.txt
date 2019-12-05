@@ -1,0 +1,20 @@
+model{
+  
+  for(i in 1:55) {
+    b1[i] ~ dnorm(theta,tau[i])
+    b3[i] ~ dnorm(theta2,tau2[i])
+    tau[i]  <- pow(sigma.theta[i],-2)
+    sigma.theta[i]~dunif(0,1000)
+    tau2[i]  <- pow(sigma.theta2[i],-2)
+    sigma.theta2[i]~dunif(0,1000)
+
+  }
+  for( k in 1:N ){
+    y[k] ~ dpois(lambda[k])
+    log(lambda[k]) <- b1[R[k]]  + b3[R[k]]*TR[k]
+    
+  }
+  theta ~ dnorm(0,0.000001)
+  theta2 ~ dnorm(0,0.000001)
+ 
+}
